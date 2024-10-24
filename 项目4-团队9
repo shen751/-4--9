@@ -1,0 +1,62 @@
+class Train:
+    def __init__(self, train_id, position, speed, status):
+        self.train_id = train_id
+        self.position = position
+        self.speed = speed
+        self.status = status
+
+class TrainMonitoringSystem:
+    def __init__(self):
+        self.trains = []
+        self.speed_threshold = 100  # 假设速度阈值为100
+
+    def add_train(self, train):
+        self.trains.append(train)
+
+    def get_train_status(self, train_id):
+        for train in self.trains:
+            if train.train_id == train_id:
+                return f"Train {train_id}: Position: {train.position}, Speed: {train.speed} km/h, Status: {train.status}"
+        return "Train not found."
+
+    def generate_report(self):
+        report = "Train Status Report:\n"
+        faulty_trains = []
+        total_speed = 0
+        count = 0
+
+        for train in self.trains:
+            report += f"Train {train.train_id}: Position: {train.position}, Speed: {train.speed} km/h, Status: {train.status}\n"
+            if train.status.lower() == "fault":
+                faulty_trains.append(train.train_id)
+            total_speed += train.speed
+            count += 1
+
+        if count > 0:
+            average_speed = total_speed / count
+        else:
+            average_speed = 0
+
+        report += f"Faulty Trains: {', '.join(map(str, faulty_trains))}\n"
+        report += f"Average Speed: {average_speed:.2f} km/h\n"
+
+        return report
+
+    def check_for_overspeed(self):
+        overspeed_trains = []
+        for train in self.trains:
+            if train.speed > self.speed_threshold:
+                overspeed_trains.append(train.train_id)
+                print(f"Alert: Train {train.train_id} is overspeeding! Current Speed: {train.speed} km/h")
+
+        return overspeed_trains
+
+# Example usage:
+system = TrainMonitoringSystem()
+system.add_train(Train("T1", "Station A", 80, "normal"))
+system.add_train(Train("T2", "Station B", 120, "fault"))
+system.add_train(Train("T3", "Station C", 90, "normal"))
+
+print(system.get_train_status("T1"))
+print(system.generate_report())
+system.check_for_overspeed()
