@@ -1,0 +1,21 @@
+class Passenger:
+    def __init__(self, name, contact, date_of_travel):
+        self.name = name
+        self.contact = self.validate_contact(contact)
+        self.date_of_travel = date_of_travel
+
+    @staticmethod
+    def validate_contact(phone_number):
+        # 简单的电话号码格式验证，实际应用可能需要更复杂
+        if not isinstance(phone_number, str) or not phone_number.isdigit() or len(phone_number) != 11:
+            raise ValueError("Invalid phone number format")
+        return phone_number
+
+    def add_trip(self, trip_date):
+        # 添加乘车记录
+        self.trips.append(trip_date)
+
+    def generate_report(self):
+        # 生成乘车记录报告
+        report = f"Name: {self.name}\nContact: {self.contact}\nTravel History:\n{self.trips}"
+        return report
